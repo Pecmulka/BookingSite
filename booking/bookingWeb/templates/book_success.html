@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бронирование подтверждено — Ресторан «Берёза»</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css">
+    <link rel="stylesheet" href="{% static 'booking/css/style.css' %}">
+    <style>
+        body {
+            display: flex !important;
+            flex-direction: column !important;
+            min-height: 100vh !important;
+            margin: 0 !important;
+            background: #FAF7F2 !important;
+        }
+        main { flex: 1 0 auto !important; }
+        .site-footer { flex-shrink: 0 !important; }
+        .site-header { background:#8B5E3C !important; border-bottom:3px solid #6e4a2e !important; position:sticky !important; top:0 !important; z-index:1000 !important; }
+        .header-row { display:flex !important; align-items:center !important; justify-content:space-between !important; height:62px !important; padding:0 24px !important; max-width:1200px !important; margin:0 auto !important; gap:20px !important; box-sizing:border-box !important; }
+        .site-logo { font-size:1.15rem !important; font-weight:700 !important; color:#fff !important; text-decoration:none !important; white-space:nowrap !important; }
+        .header-right { display:flex !important; align-items:center !important; gap:12px !important; }
+        .btn-header { display:inline-flex !important; align-items:center !important; gap:6px !important; padding:6px 16px !important; border-radius:6px !important; font-size:0.875rem !important; font-weight:600 !important; border:1.5px solid rgba(255,255,255,0.55) !important; color:#fff !important; background:transparent !important; text-decoration:none !important; }
+        .btn-header:hover { background:rgba(255,255,255,0.18) !important; }
+        .site-footer { background:#3a2a1e !important; color:#BDB0A7 !important; padding:40px 0 0 !important; border-top:4px solid #8B5E3C !important; }
+        .footer-inner { max-width:1200px !important; margin:0 auto !important; padding:0 24px !important; display:grid !important; grid-template-columns:1fr 1fr 1fr !important; gap:32px !important; }
+        .footer-title { font-size:0.8rem !important; font-weight:700 !important; text-transform:uppercase !important; color:#fff !important; margin:0 0 10px !important; }
+        .footer-inner p, .footer-inner li { font-size:0.875rem !important; color:#BDB0A7 !important; margin:0 0 5px !important; }
+        .footer-inner ul { list-style:none !important; padding:0 !important; margin:0 !important; }
+        .footer-bottom { max-width:1200px !important; margin:28px auto 0 !important; padding:14px 24px !important; border-top:1px solid rgba(255,255,255,0.08) !important; font-size:0.8rem !important; text-align:center !important; color:#7A6E65 !important; }
+
+        .success-code {
+            font-family: monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: #8B5E3C;
+            background: #F3EDE6;
+            border: 2px dashed #8B5E3C;
+            border-radius: 8px;
+            padding: 14px 28px;
+            display: inline-block;
+            margin: 12px 0;
+        }
+        @media (max-width: 700px) {
+            .footer-inner { grid-template-columns: 1fr !important; }
+            .header-row { padding: 0 16px !important; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ШАПКА -->
+<header class="site-header">
+    <div class="header-row">
+        <a href="/" class="site-logo">🍽 Ресторан «Берёза»</a>
+        <div class="header-right">
+            {% if request.session.user_id %}
+                <a href="/logout/" class="btn-header">
+                    <span uk-icon="icon: sign-out; ratio: 0.85"></span> Выйти
+                </a>
+            {% else %}
+                <a href="/login/" class="btn-header">
+                    <span uk-icon="icon: lock; ratio: 0.85"></span> Войти
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+<main class="uk-section">
+    <div class="uk-container">
+        <div class="uk-flex uk-flex-center">
+            <div class="uk-card uk-card-default uk-card-body uk-box-shadow-medium uk-width-2-3@m uk-text-center">
+
+                <!-- Иконка успеха -->
+                <div style="margin-bottom: 16px;">
+                    <span uk-icon="icon: check-circle; ratio: 3.5" style="color: #3D8B5E;"></span>
+                </div>
+
+                <h2 style="color: #3D8B5E; margin: 0 0 8px;">Бронирование оформлено!</h2>
+                <p class="uk-text-muted uk-margin-small-bottom">
+                    Ваш столик забронирован. Сохраните код подтверждения.
+                </p>
+
+                <!-- Код подтверждения -->
+                <div class="uk-margin">
+                    <div class="uk-text-muted uk-text-small">Код подтверждения</div>
+                    <div class="success-code">{{ reservation.confirmation_code }}</div>
+                    <div class="uk-text-muted uk-text-small">
+                        Предъявите код при визите или используйте для отмены брони
+                    </div>
+                </div>
+
+                <hr class="uk-divider-muted">
+
+                <!-- Детали -->
+                <div class="uk-grid-small uk-child-width-1-2@s uk-text-left uk-margin" uk-grid>
+                    <div>
+                        <div class="uk-text-muted uk-text-small">Столик</div>
+                        <div style="font-weight:600;">№ {{ reservation.table.number }} — {{ reservation.table.description|default:"Стандартное место" }}</div>
+                    </div>
+                    <div>
+                        <div class="uk-text-muted uk-text-small">Гость</div>
+                        <div style="font-weight:600;">{{ reservation.guest_name }}</div>
+                    </div>
+                    <div>
+                        <div class="uk-text-muted uk-text-small">Дата</div>
+                        <div style="font-weight:600;">{{ reservation.date }}</div>
+                    </div>
+                    <div>
+                        <div class="uk-text-muted uk-text-small">Время</div>
+                        <div style="font-weight:600;">{{ reservation.start_time|time:"H:i" }} — {{ reservation.end_time|time:"H:i" }}</div>
+                    </div>
+                    <div>
+                        <div class="uk-text-muted uk-text-small">Количество гостей</div>
+                        <div style="font-weight:600;">{{ reservation.guests_count }}</div>
+                    </div>
+                    <div>
+                        <div class="uk-text-muted uk-text-small">Статус</div>
+                        <div style="font-weight:600; color:#b7770d;">{{ reservation.status.name }}</div>
+                    </div>
+                </div>
+
+                {% if reservation.comment %}
+                <div class="uk-text-left uk-margin-small-bottom">
+                    <div class="uk-text-muted uk-text-small">Пожелания</div>
+                    <div>{{ reservation.comment }}</div>
+                </div>
+                {% endif %}
+
+                <hr class="uk-divider-muted">
+
+                <a href="/" class="uk-button uk-button-primary">
+                    <span uk-icon="icon: home; ratio: 0.9" class="uk-margin-small-right"></span>
+                    Вернуться на главную
+                </a>
+
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- ПОДВАЛ -->
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div>
+            <p class="footer-title">Ресторан «Берёза»</p>
+            <p>Бронируйте столик заранее — и вас будут ждать.</p>
+        </div>
+        <div>
+            <p class="footer-title">Контакты</p>
+            <ul>
+                <li>г. Абакан, ул. Пушкина, 10</li>
+                <li>+7 (3902) 22-33-44</li>
+            </ul>
+        </div>
+        <div>
+            <p class="footer-title">Время работы</p>
+            <ul><li>Ежедневно: 10:00 — 23:00</li></ul>
+        </div>
+    </div>
+    <div class="footer-bottom">&copy; {% now "Y" %} Ресторан «Берёза»</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit-icons.min.js"></script>
+</body>
+</html>

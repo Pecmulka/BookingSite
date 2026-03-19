@@ -9,6 +9,19 @@
     <link rel="stylesheet" href="{% static 'booking/css/style.css' %}">
     <style>
         /* Гарантированные стили шапки и подвала поверх UIkit */
+        body {
+            display: flex !important;
+            flex-direction: column !important;
+            min-height: 100vh !important;
+            margin: 0 !important;
+            background: #FAF7F2 !important;
+        }
+        main {
+            flex: 1 0 auto !important;
+        }
+        .site-footer {
+            flex-shrink: 0 !important;
+        }
         .site-header {
             background: #8B5E3C !important;
             border-bottom: 3px solid #6e4a2e !important;
@@ -188,7 +201,7 @@
                     {% for table in tables %}
                     <tr>
                         <td>
-                            <span class="uk-badge" style="background:var(--brown);">{{ table.number }}</span>
+                            <span style="font-weight:700; color:#2C2218;">{{ table.number }}</span>
                         </td>
                         <td>
                             <span uk-icon="icon: users; ratio: 0.85" class="uk-margin-small-right uk-text-muted"></span>

@@ -9,6 +9,19 @@
     <link rel="stylesheet" href="{% static 'booking/css/style.css' %}">
     <style>
         /* Гарантированные стили шапки и подвала поверх UIkit */
+        body {
+            display: flex !important;
+            flex-direction: column !important;
+            min-height: 100vh !important;
+            margin: 0 !important;
+            background: #FAF7F2 !important;
+        }
+        main {
+            flex: 1 0 auto !important;
+        }
+        .site-footer {
+            flex-shrink: 0 !important;
+        }
         .site-header {
             background: #8B5E3C !important;
             border-bottom: 3px solid #6e4a2e !important;
@@ -193,9 +206,7 @@
                     {% for r in reservations %}
                     <tr>
                         <td>
-                            <span class="uk-label" style="background:var(--brown); font-size:0.75rem;">
-                                {{ r.confirmation_code }}
-                            </span>
+                            <span style="font-weight:700; color:#2C2218; font-family:monospace;">{{ r.confirmation_code }}</span>
                         </td>
                         <td>№ {{ r.table.number }}</td>
                         <td>{{ r.guest_name }}</td>

@@ -23,6 +23,10 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
 
+    # Бронирование мест
+    path('book/<int:pk>/', views.book_table, name='book_table'),
+    path('book/success/<str:code>/', views.book_success, name='book_success'),
+
     # Управление столиками
     path('admin/tables/', views.table_list, name='table_list'),
     path('admin/tables/add/', views.table_add, name='table_add'),

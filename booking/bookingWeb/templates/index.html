@@ -9,6 +9,19 @@
     <link rel="stylesheet" href="{% static 'booking/css/style.css' %}">
     <style>
         /* Гарантированные стили шапки и подвала поверх UIkit */
+        body {
+            display: flex !important;
+            flex-direction: column !important;
+            min-height: 100vh !important;
+            margin: 0 !important;
+            background: #FAF7F2 !important;
+        }
+        main {
+            flex: 1 0 auto !important;
+        }
+        .site-footer {
+            flex-shrink: 0 !important;
+        }
         .site-header {
             background: #8B5E3C !important;
             border-bottom: 3px solid #6e4a2e !important;
@@ -245,7 +258,7 @@
                     </div>
 
                     <div class="uk-card-footer" style="padding:12px 20px;">
-                        <a href="#" class="uk-button uk-button-primary uk-width-1-1 uk-button-small">
+                        <a href="/book/{{ table.pk }}/" class="uk-button uk-button-primary uk-width-1-1 uk-button-small">
                             <span uk-icon="icon: calendar; ratio: 0.85" class="uk-margin-small-right"></span>
                             Забронировать
                         </a>

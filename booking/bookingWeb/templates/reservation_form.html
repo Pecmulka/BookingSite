@@ -9,6 +9,19 @@
     <link rel="stylesheet" href="{% static 'booking/css/style.css' %}">
     <style>
         /* Гарантированные стили шапки и подвала поверх UIkit */
+        body {
+            display: flex !important;
+            flex-direction: column !important;
+            min-height: 100vh !important;
+            margin: 0 !important;
+            background: #FAF7F2 !important;
+        }
+        main {
+            flex: 1 0 auto !important;
+        }
+        .site-footer {
+            flex-shrink: 0 !important;
+        }
         .site-header {
             background: #8B5E3C !important;
             border-bottom: 3px solid #6e4a2e !important;
@@ -265,7 +278,7 @@
                             <label class="uk-form-label">Дата <span class="uk-text-danger">*</span></label>
                             <div class="uk-form-controls">
                                 <input class="uk-input" type="date" name="date"
-                                       value="{{ reservation.date|default:'' }}" required>
+                                       value="{{ reservation.date|date:'Y-m-d'|default:'' }}" required>
                             </div>
                         </div>
                     </div>
@@ -287,7 +300,7 @@
                             <label class="uk-form-label">Время начала <span class="uk-text-danger">*</span></label>
                             <div class="uk-form-controls">
                                 <input class="uk-input" type="time" name="start_time"
-                                       value="{{ reservation.start_time|default:'' }}" required>
+                                       value="{{ reservation.start_time|time:'H:i'|default:'' }}" required>
                             </div>
                         </div>
                     </div>
@@ -296,7 +309,7 @@
                             <label class="uk-form-label">Время окончания <span class="uk-text-danger">*</span></label>
                             <div class="uk-form-controls">
                                 <input class="uk-input" type="time" name="end_time"
-                                       value="{{ reservation.end_time|default:'' }}" required>
+                                       value="{{ reservation.end_time|time:'H:i'|default:'' }}" required>
                             </div>
                         </div>
                     </div>

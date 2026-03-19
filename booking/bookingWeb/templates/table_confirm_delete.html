@@ -4,11 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ action }} — Ресторан «Берёза»</title>
+    <title>Удалить столик — Ресторан «Берёза»</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css">
     <link rel="stylesheet" href="{% static 'booking/css/style.css' %}">
     <style>
         /* Гарантированные стили шапки и подвала поверх UIkit */
+        body {
+            display: flex !important;
+            flex-direction: column !important;
+            min-height: 100vh !important;
+            margin: 0 !important;
+            background: #FAF7F2 !important;
+        }
+        main {
+            flex: 1 0 auto !important;
+        }
+        .site-footer {
+            flex-shrink: 0 !important;
+        }
         .site-header {
             background: #8B5E3C !important;
             border-bottom: 3px solid #6e4a2e !important;
@@ -165,56 +178,28 @@
 
         <ul class="uk-breadcrumb uk-margin-small-bottom">
             <li><a href="/admin/tables/">Столики</a></li>
-            <li><span>{{ action }}</span></li>
+            <li><span>Удаление</span></li>
         </ul>
 
-        <h2 class="uk-heading-line uk-margin-medium-bottom"><span>{{ action }}</span></h2>
-
         <div class="uk-card uk-card-default uk-card-body uk-box-shadow-small uk-width-1-2@m">
+            <h3 class="uk-card-title">Удалить столик</h3>
 
-            {% if error %}
-            <div class="uk-alert-danger" uk-alert>
-                <span uk-icon="icon: warning; ratio: 0.9" class="uk-margin-small-right"></span>{{ error }}
+            <div class="uk-alert-warning" uk-alert>
+                <span uk-icon="icon: warning; ratio: 1" class="uk-margin-small-right"></span>
+                Вы уверены, что хотите удалить <strong>Столик № {{ table.number }}</strong>
+                ({{ table.capacity }} мест)? Все связанные бронирования также будут удалены.
             </div>
-            {% endif %}
 
-            <form method="post" class="uk-form-stacked">
+            <form method="post">
                 {% csrf_token %}
-
-                <div class="uk-margin">
-                    <label class="uk-form-label">Номер столика <span class="uk-text-danger">*</span></label>
-                    <div class="uk-form-controls">
-                        <input class="uk-input" type="number" name="number" min="1"
-                               value="{{ table.number|default:'' }}" required placeholder="Например: 5">
-                    </div>
-                </div>
-
-                <div class="uk-margin">
-                    <label class="uk-form-label">Вместимость (мест) <span class="uk-text-danger">*</span></label>
-                    <div class="uk-form-controls">
-                        <input class="uk-input" type="number" name="capacity" min="1"
-                               value="{{ table.capacity|default:'' }}" required placeholder="Например: 4">
-                    </div>
-                </div>
-
-                <div class="uk-margin">
-                    <label class="uk-form-label">Описание / расположение</label>
-                    <div class="uk-form-controls">
-                        <input class="uk-input" type="text" name="description"
-                               value="{{ table.description|default:'' }}"
-                               placeholder="Например: у окна, на веранде...">
-                    </div>
-                </div>
-
-                <div class="uk-margin-medium-top uk-flex" style="gap:12px;">
-                    <button type="submit" class="uk-button uk-button-primary">
-                        <span uk-icon="icon: check; ratio: 0.9" class="uk-margin-small-right"></span>Сохранить
+                <div class="uk-flex" style="gap:12px;">
+                    <button type="submit" class="uk-button uk-button-danger">
+                        <span uk-icon="icon: trash; ratio: 0.9" class="uk-margin-small-right"></span>Да, удалить
                     </button>
                     <a href="/admin/tables/" class="uk-button uk-button-default">Отмена</a>
                 </div>
             </form>
         </div>
-
     </div>
 </main>
 
