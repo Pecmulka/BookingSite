@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход — Ресторан «Берёза»</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css">
+    <link rel="stylesheet" href="{% static 'booking/css/style.css' %}">
+    <style>
+        /* Гарантируем центрирование независимо от UIkit */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #FAF7F2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="uk-card uk-card-default uk-card-body uk-box-shadow-large"
+         style="width: 100%; max-width: 420px;">
+
+        <!-- Заголовок -->
+        <div class="uk-text-center uk-margin-medium-bottom">
+            <span uk-icon="icon: lock; ratio: 2.2" style="color: #8B5E3C;"></span>
+            <h2 class="uk-margin-small-top uk-margin-remove-bottom"
+                style="color: #8B5E3C; font-size: 1.3rem;">
+                Ресторан «Берёза»
+            </h2>
+            <p class="uk-text-muted uk-text-small uk-margin-remove">
+                Вход для сотрудников
+            </p>
+        </div>
+
+        <!-- Ошибка -->
+        {% if error %}
+        <div class="uk-alert-danger" uk-alert>
+            <span uk-icon="icon: warning; ratio: 0.9" class="uk-margin-small-right"></span>
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <!-- Форма -->
+        <form method="post" action="/login/" class="uk-form-stacked">
+            {% csrf_token %}
+
+            <div class="uk-margin">
+                <label class="uk-form-label" for="login">Логин</label>
+                <div class="uk-form-controls">
+                    <div class="uk-inline uk-width-1-1">
+                        <span class="uk-form-icon" uk-icon="icon: user"></span>
+                        <input class="uk-input" type="text" id="login" name="login"
+                               placeholder="Введите логин" required autofocus
+                               value="{{ request.POST.login|default:'' }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                <label class="uk-form-label" for="password">Пароль</label>
+                <div class="uk-form-controls">
+                    <div class="uk-inline uk-width-1-1">
+                        <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                        <input class="uk-input" type="password" id="password" name="password"
+                               placeholder="Введите пароль" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-margin-medium-top">
+                <button type="submit" class="uk-button uk-button-primary uk-width-1-1">
+                    Войти
+                </button>
+            </div>
+        </form>
+
+        <div class="uk-text-center uk-margin-top">
+            <a href="/" class="uk-text-small uk-text-muted">
+                <span uk-icon="icon: arrow-left; ratio: 0.8"></span>
+                Вернуться на главную
+            </a>
+        </div>
+
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit-icons.min.js"></script>
+</body>
+</html>

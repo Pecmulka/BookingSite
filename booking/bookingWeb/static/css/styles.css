@@ -1,0 +1,266 @@
+/* =============================================
+   Переменные
+   ============================================= */
+:root {
+    --brown:      #8B5E3C;
+    --brown-dark: #6e4a2e;
+    --brown-light:#F3EDE6;
+    --bg:         #FAF7F2;
+    --border:     #E8E0D5;
+    --text:       #2C2218;
+    --muted:      #7A6E65;
+    --green:      #3D8B5E;
+    --red:        #C0392B;
+}
+
+/* =============================================
+   Базовые
+   ============================================= */
+body {
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+}
+
+/* =============================================
+   Шапка
+   ============================================= */
+.site-header {
+    background: var(--brown);
+    border-bottom: 3px solid var(--brown-dark);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Внутренняя строка шапки */
+.header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 62px;
+    padding: 0 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 20px;
+}
+
+/* Логотип */
+.site-logo {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff !important;
+    text-decoration: none !important;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.site-logo:hover {
+    color: #f0e6da !important;
+    text-decoration: none !important;
+}
+
+/* Навигация */
+.site-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+}
+.site-nav a {
+    display: block;
+    padding: 6px 14px;
+    border-radius: 6px;
+    color: rgba(255,255,255,0.85) !important;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none !important;
+    transition: background 0.15s, color 0.15s;
+}
+.site-nav a:hover,
+.site-nav a.active {
+    background: rgba(255,255,255,0.18);
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+/* Правая часть шапки */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+.header-user {
+    color: rgba(255,255,255,0.8);
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+.btn-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none !important;
+    border: 1.5px solid rgba(255,255,255,0.5);
+    color: #fff !important;
+    background: transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, border-color 0.15s;
+}
+.btn-header:hover {
+    background: rgba(255,255,255,0.18);
+    border-color: #fff;
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+/* =============================================
+   Кнопки — переопределяем UIkit
+   ============================================= */
+.uk-button-primary {
+    background: var(--brown) !important;
+    border-color: var(--brown) !important;
+    color: #fff !important;
+}
+.uk-button-primary:hover {
+    background: var(--brown-dark) !important;
+    border-color: var(--brown-dark) !important;
+}
+.uk-button-danger {
+    background: var(--red) !important;
+    border-color: var(--red) !important;
+    color: #fff !important;
+}
+
+/* =============================================
+   Карточки столиков
+   ============================================= */
+.table-card:hover {
+    transform: translateY(-3px);
+    transition: transform 0.2s ease;
+}
+
+/* =============================================
+   Бейджи статусов
+   ============================================= */
+.badge-pending   { background: #FEF9E7; color: #b7770d; border: 1px solid #f9e79f; }
+.badge-confirmed { background: #EAFAF1; color: #1e8449; border: 1px solid #a9dfbf; }
+.badge-cancelled { background: #FDECEA; color: var(--red); border: 1px solid #f5c6c2; }
+.badge-completed { background: #EAF4FB; color: #2471a3; border: 1px solid #aed6f1; }
+
+/* =============================================
+   Подвал
+   ============================================= */
+.site-footer {
+    background: #3a2a1e;
+    color: #BDB0A7;
+    padding: 40px 0 0;
+    margin-top: 60px;
+    border-top: 4px solid var(--brown);
+}
+.footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+}
+.footer-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #fff;
+    margin: 0 0 12px;
+}
+.footer-inner p,
+.footer-inner li {
+    font-size: 0.875rem;
+    margin: 0 0 6px;
+    color: #BDB0A7;
+}
+.footer-inner ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.footer-bottom {
+    max-width: 1200px;
+    margin: 28px auto 0;
+    padding: 14px 24px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 0.8rem;
+    text-align: center;
+    color: #7A6E65;
+}
+
+/* =============================================
+   Инфо о заведении
+   ============================================= */
+.restaurant-info {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 20px;
+}
+
+/* =============================================
+   Фильтр-чипсы
+   ============================================= */
+.filter-chip {
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: 1.5px solid var(--border);
+    color: var(--muted);
+    background: #fff;
+    text-decoration: none;
+}
+.filter-chip:hover,
+.filter-chip.active {
+    border-color: var(--brown);
+    color: var(--brown);
+    background: var(--brown-light);
+    text-decoration: none;
+}
+
+/* =============================================
+   Страница авторизации
+   ============================================= */
+.auth-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    padding: 20px;
+}
+
+/* =============================================
+   Таблица администратора
+   ============================================= */
+.uk-table th {
+    background: var(--brown-light);
+    color: var(--text);
+    font-weight: 700;
+}
+
+/* =============================================
+   Адаптив
+   ============================================= */
+@media (max-width: 700px) {
+    .site-nav { display: none; }
+    .header-user { display: none; }
+    .footer-inner { grid-template-columns: 1fr; gap: 20px; }
+    .header-row { padding: 0 16px; }
+}

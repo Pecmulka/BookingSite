@@ -1,0 +1,200 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Удалить бронь — Ресторан «Берёза»</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css">
+    <link rel="stylesheet" href="{% static 'booking/css/style.css' %}">
+    <style>
+        /* Гарантированные стили шапки и подвала поверх UIkit */
+        .site-header {
+            background: #8B5E3C !important;
+            border-bottom: 3px solid #6e4a2e !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1000 !important;
+        }
+        .header-row {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            height: 62px !important;
+            padding: 0 24px !important;
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            gap: 20px !important;
+            box-sizing: border-box !important;
+        }
+        .site-logo {
+            font-size: 1.15rem !important;
+            font-weight: 700 !important;
+            color: #fff !important;
+            text-decoration: none !important;
+            white-space: nowrap !important;
+            flex-shrink: 0 !important;
+        }
+        .site-nav {
+            display: flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+            list-style: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            flex: 1 !important;
+        }
+        .site-nav li { margin: 0 !important; padding: 0 !important; }
+        .site-nav a {
+            display: block !important;
+            padding: 6px 14px !important;
+            border-radius: 6px !important;
+            color: rgba(255,255,255,0.85) !important;
+            font-size: 0.9rem !important;
+            font-weight: 500 !important;
+            text-decoration: none !important;
+        }
+        .site-nav a:hover, .site-nav a.active {
+            background: rgba(255,255,255,0.18) !important;
+            color: #fff !important;
+        }
+        .header-right {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            flex-shrink: 0 !important;
+        }
+        .header-user {
+            color: rgba(255,255,255,0.85) !important;
+            font-size: 0.875rem !important;
+            white-space: nowrap !important;
+        }
+        .btn-header {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            padding: 6px 16px !important;
+            border-radius: 6px !important;
+            font-size: 0.875rem !important;
+            font-weight: 600 !important;
+            border: 1.5px solid rgba(255,255,255,0.55) !important;
+            color: #fff !important;
+            background: transparent !important;
+            text-decoration: none !important;
+            cursor: pointer !important;
+            white-space: nowrap !important;
+        }
+        .btn-header:hover {
+            background: rgba(255,255,255,0.18) !important;
+            border-color: #fff !important;
+            color: #fff !important;
+        }
+        .site-footer {
+            background: #3a2a1e !important;
+            color: #BDB0A7 !important;
+            padding: 40px 0 0 !important;
+            margin-top: 60px !important;
+            border-top: 4px solid #8B5E3C !important;
+        }
+        .footer-inner {
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 0 24px !important;
+            display: grid !important;
+            grid-template-columns: 1fr 1fr 1fr !important;
+            gap: 32px !important;
+        }
+        .footer-title {
+            font-size: 0.8rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.08em !important;
+            color: #fff !important;
+            margin: 0 0 10px !important;
+        }
+        .footer-inner p, .footer-inner li {
+            font-size: 0.875rem !important;
+            color: #BDB0A7 !important;
+            margin: 0 0 5px !important;
+        }
+        .footer-inner ul {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .footer-bottom {
+            max-width: 1200px !important;
+            margin: 28px auto 0 !important;
+            padding: 14px 24px !important;
+            border-top: 1px solid rgba(255,255,255,0.08) !important;
+            font-size: 0.8rem !important;
+            text-align: center !important;
+            color: #7A6E65 !important;
+        }
+        @media (max-width: 700px) {
+            .site-nav { display: none !important; }
+            .header-user { display: none !important; }
+            .footer-inner { grid-template-columns: 1fr !important; }
+            .header-row { padding: 0 16px !important; }
+        }
+    </style>
+
+</head>
+<body>
+
+<!-- ШАПКА -->
+<header class="site-header">
+    <div class="header-row">
+        <a href="/" class="site-logo">🍽 Ресторан «Берёза»</a>
+        <ul class="site-nav">
+            <li><a href="/">Главная</a></li>
+            <li><a href="/admin/tables/">Столики</a></li>
+            <li><a href="/admin/reservations/" class="active">Брони</a></li>
+        </ul>
+        <div class="header-right">
+            <span class="header-user">{{ request.session.user_fio }}</span>
+            <a href="/logout/" class="btn-header">
+                <span uk-icon="icon: sign-out; ratio: 0.85"></span> Выйти
+            </a>
+        </div>
+    </div>
+</header>
+
+<main class="uk-section uk-section-small">
+    <div class="uk-container">
+
+        <ul class="uk-breadcrumb uk-margin-small-bottom">
+            <li><a href="/admin/reservations/">Брони</a></li>
+            <li><span>Удаление</span></li>
+        </ul>
+
+        <div class="uk-card uk-card-default uk-card-body uk-box-shadow-small uk-width-1-2@m">
+            <h3 class="uk-card-title">Удалить бронирование</h3>
+
+            <div class="uk-alert-warning" uk-alert>
+                <span uk-icon="icon: warning; ratio: 1" class="uk-margin-small-right"></span>
+                Вы уверены, что хотите удалить бронирование
+                <strong>{{ reservation.confirmation_code }}</strong>?<br>
+                <span class="uk-text-small">
+                    Гость: <strong>{{ reservation.guest_name }}</strong> —
+                    {{ reservation.date }}, Столик №{{ reservation.table.number }}
+                </span>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="uk-flex" style="gap:12px;">
+                    <button type="submit" class="uk-button uk-button-danger">
+                        <span uk-icon="icon: trash; ratio: 0.9" class="uk-margin-small-right"></span>Да, удалить
+                    </button>
+                    <a href="/admin/reservations/" class="uk-button uk-button-default">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit-icons.min.js"></script>
+</body>
+</html>

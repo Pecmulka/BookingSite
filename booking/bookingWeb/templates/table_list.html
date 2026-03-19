@@ -1,0 +1,230 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление столиками — Ресторан «Берёза»</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css">
+    <link rel="stylesheet" href="{% static 'booking/css/style.css' %}">
+    <style>
+        /* Гарантированные стили шапки и подвала поверх UIkit */
+        .site-header {
+            background: #8B5E3C !important;
+            border-bottom: 3px solid #6e4a2e !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1000 !important;
+        }
+        .header-row {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            height: 62px !important;
+            padding: 0 24px !important;
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            gap: 20px !important;
+            box-sizing: border-box !important;
+        }
+        .site-logo {
+            font-size: 1.15rem !important;
+            font-weight: 700 !important;
+            color: #fff !important;
+            text-decoration: none !important;
+            white-space: nowrap !important;
+            flex-shrink: 0 !important;
+        }
+        .site-nav {
+            display: flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+            list-style: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            flex: 1 !important;
+        }
+        .site-nav li { margin: 0 !important; padding: 0 !important; }
+        .site-nav a {
+            display: block !important;
+            padding: 6px 14px !important;
+            border-radius: 6px !important;
+            color: rgba(255,255,255,0.85) !important;
+            font-size: 0.9rem !important;
+            font-weight: 500 !important;
+            text-decoration: none !important;
+        }
+        .site-nav a:hover, .site-nav a.active {
+            background: rgba(255,255,255,0.18) !important;
+            color: #fff !important;
+        }
+        .header-right {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            flex-shrink: 0 !important;
+        }
+        .header-user {
+            color: rgba(255,255,255,0.85) !important;
+            font-size: 0.875rem !important;
+            white-space: nowrap !important;
+        }
+        .btn-header {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            padding: 6px 16px !important;
+            border-radius: 6px !important;
+            font-size: 0.875rem !important;
+            font-weight: 600 !important;
+            border: 1.5px solid rgba(255,255,255,0.55) !important;
+            color: #fff !important;
+            background: transparent !important;
+            text-decoration: none !important;
+            cursor: pointer !important;
+            white-space: nowrap !important;
+        }
+        .btn-header:hover {
+            background: rgba(255,255,255,0.18) !important;
+            border-color: #fff !important;
+            color: #fff !important;
+        }
+        .site-footer {
+            background: #3a2a1e !important;
+            color: #BDB0A7 !important;
+            padding: 40px 0 0 !important;
+            margin-top: 60px !important;
+            border-top: 4px solid #8B5E3C !important;
+        }
+        .footer-inner {
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 0 24px !important;
+            display: grid !important;
+            grid-template-columns: 1fr 1fr 1fr !important;
+            gap: 32px !important;
+        }
+        .footer-title {
+            font-size: 0.8rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.08em !important;
+            color: #fff !important;
+            margin: 0 0 10px !important;
+        }
+        .footer-inner p, .footer-inner li {
+            font-size: 0.875rem !important;
+            color: #BDB0A7 !important;
+            margin: 0 0 5px !important;
+        }
+        .footer-inner ul {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .footer-bottom {
+            max-width: 1200px !important;
+            margin: 28px auto 0 !important;
+            padding: 14px 24px !important;
+            border-top: 1px solid rgba(255,255,255,0.08) !important;
+            font-size: 0.8rem !important;
+            text-align: center !important;
+            color: #7A6E65 !important;
+        }
+        @media (max-width: 700px) {
+            .site-nav { display: none !important; }
+            .header-user { display: none !important; }
+            .footer-inner { grid-template-columns: 1fr !important; }
+            .header-row { padding: 0 16px !important; }
+        }
+    </style>
+
+</head>
+<body>
+
+<!-- ШАПКА -->
+<header class="site-header">
+    <div class="header-row">
+        <a href="/" class="site-logo">🍽 Ресторан «Берёза»</a>
+        <ul class="site-nav">
+            <li><a href="/">Главная</a></li>
+            <li><a href="/admin/tables/" class="active">Столики</a></li>
+            <li><a href="/admin/reservations/">Брони</a></li>
+        </ul>
+        <div class="header-right">
+            <span class="header-user">{{ request.session.user_fio }}</span>
+            <a href="/logout/" class="btn-header">
+                <span uk-icon="icon: sign-out; ratio: 0.85"></span> Выйти
+            </a>
+        </div>
+    </div>
+</header>
+
+<main class="uk-section uk-section-small">
+    <div class="uk-container">
+
+        <div class="uk-flex uk-flex-between uk-flex-middle uk-margin-medium-bottom">
+            <h2 class="uk-heading-line uk-margin-remove">
+                <span>Управление столиками</span>
+            </h2>
+            <a href="/admin/tables/add/" class="uk-button uk-button-primary uk-button-small">
+                <span uk-icon="icon: plus; ratio: 0.85" class="uk-margin-small-right"></span>
+                Добавить столик
+            </a>
+        </div>
+
+        {% if tables %}
+        <div class="uk-card uk-card-default uk-box-shadow-small">
+            <table class="uk-table uk-table-striped uk-table-hover uk-table-divider uk-margin-remove">
+                <thead>
+                    <tr>
+                        <th>№ столика</th>
+                        <th>Вместимость</th>
+                        <th>Описание</th>
+                        <th class="uk-text-center">Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for table in tables %}
+                    <tr>
+                        <td>
+                            <span class="uk-badge" style="background:var(--brown);">{{ table.number }}</span>
+                        </td>
+                        <td>
+                            <span uk-icon="icon: users; ratio: 0.85" class="uk-margin-small-right uk-text-muted"></span>
+                            {{ table.capacity }} мест
+                        </td>
+                        <td class="uk-text-muted uk-text-small">{{ table.description|default:"—" }}</td>
+                        <td class="uk-text-center">
+                            <div class="uk-button-group">
+                                <a href="/admin/tables/{{ table.pk }}/edit/"
+                                   class="uk-button uk-button-default uk-button-small">
+                                    <span uk-icon="icon: pencil; ratio: 0.8"></span>
+                                </a>
+                                <a href="/admin/tables/{{ table.pk }}/delete/"
+                                   class="uk-button uk-button-danger uk-button-small">
+                                    <span uk-icon="icon: trash; ratio: 0.8"></span>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% else %}
+        <div class="uk-placeholder uk-text-center uk-padding-large">
+            <span uk-icon="icon: table; ratio: 2" class="uk-text-muted"></span>
+            <p class="uk-text-muted uk-margin-small">Столиков пока нет.</p>
+            <a href="/admin/tables/add/" class="uk-button uk-button-primary uk-button-small">Добавить первый столик</a>
+        </div>
+        {% endif %}
+
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit-icons.min.js"></script>
+</body>
+</html>
