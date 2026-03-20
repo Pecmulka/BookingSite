@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация — Ресторан «Берёза»</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css">
+    <link rel="stylesheet" href="{% static 'booking/css/style.css' %}">
+    <style>
+        html, body { height: 100%; margin: 0; padding: 0; }
+        body {
+            background: #FAF7F2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="uk-card uk-card-default uk-card-body uk-box-shadow-large"
+         style="width: 100%; max-width: 440px;">
+
+        <div class="uk-text-center uk-margin-medium-bottom">
+            <span uk-icon="icon: pencil; ratio: 2.2" style="color: #8B5E3C;"></span>
+            <h2 class="uk-margin-small-top uk-margin-remove-bottom"
+                style="color: #8B5E3C; font-size: 1.3rem;">
+                Регистрация
+            </h2>
+            <p class="uk-text-muted uk-text-small uk-margin-remove">
+                Ресторан «Берёза»
+            </p>
+        </div>
+
+        {% if error %}
+        <div class="uk-alert-danger" uk-alert>
+            <span uk-icon="icon: warning; ratio: 0.9" class="uk-margin-small-right"></span>
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="post" action="/register/" class="uk-form-stacked">
+            {% csrf_token %}
+
+            <div class="uk-margin">
+                <label class="uk-form-label">ФИО <span class="uk-text-danger">*</span></label>
+                <div class="uk-inline uk-width-1-1">
+                    <span class="uk-form-icon" uk-icon="icon: user"></span>
+                    <input class="uk-input" type="text" name="fio"
+                           placeholder="Иванов Иван Иванович" required autofocus
+                           value="{{ request.POST.fio|default:'' }}">
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                <label class="uk-form-label">Логин <span class="uk-text-danger">*</span></label>
+                <div class="uk-inline uk-width-1-1">
+                    <span class="uk-form-icon" uk-icon="icon: mail"></span>
+                    <input class="uk-input" type="text" name="login"
+                           placeholder="Придумайте логин" required
+                           value="{{ request.POST.login|default:'' }}">
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                <label class="uk-form-label">Пароль <span class="uk-text-danger">*</span></label>
+                <div class="uk-inline uk-width-1-1">
+                    <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                    <input class="uk-input" type="password" name="password"
+                           placeholder="Придумайте пароль" required>
+                </div>
+            </div>
+
+            <div class="uk-margin" style="margin-bottom: 24px;">
+                <label class="uk-form-label">Повторите пароль <span class="uk-text-danger">*</span></label>
+                <div class="uk-inline uk-width-1-1">
+                    <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                    <input class="uk-input" type="password" name="password2"
+                           placeholder="Повторите пароль" required>
+                </div>
+            </div>
+
+            <button type="submit" class="uk-button uk-button-primary uk-width-1-1">
+                Зарегистрироваться
+            </button>
+        </form>
+
+        <div class="uk-text-center uk-margin-top uk-text-small uk-text-muted">
+            Уже есть аккаунт?
+            <a href="/login/" style="color: #8B5E3C;">Войти</a>
+        </div>
+        <div class="uk-text-center uk-margin-small-top">
+            <a href="/" class="uk-text-small uk-text-muted">
+                <span uk-icon="icon: arrow-left; ratio: 0.8"></span>
+                На главную
+            </a>
+        </div>
+
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit-icons.min.js"></script>
+</body>
+</html>

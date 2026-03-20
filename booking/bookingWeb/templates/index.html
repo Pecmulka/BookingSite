@@ -34,7 +34,7 @@
             align-items: center !important;
             justify-content: space-between !important;
             height: 62px !important;
-            padding: 0 24px !important;
+            padding: 0 15px !important;
             max-width: 1200px !important;
             margin: 0 auto !important;
             gap: 20px !important;
@@ -161,7 +161,6 @@
         <a href="/" class="site-logo">🍽 Ресторан «Берёза»</a>
         <ul class="site-nav">
             <li><a href="/" class="active">Главная</a></li>
-            <li><a href="#">Бронирование</a></li>
             {% if request.session.user_role == 'Администратор' %}
             <li><a href="/admin/tables/">Столики</a></li>
             <li><a href="/admin/reservations/">Брони</a></li>
@@ -169,11 +168,19 @@
         </ul>
         <div class="header-right">
             {% if request.session.user_id %}
+                {% if request.session.user_role == "Гость" %}
+                    <a href="/profile/" class="btn-header">
+                        <span uk-icon="icon: user; ratio: 0.85"></span> Личный кабинет
+                    </a>
+                {% endif %}
                 <span class="header-user">{{ request.session.user_fio }}</span>
                 <a href="/logout/" class="btn-header">
                     <span uk-icon="icon: sign-out; ratio: 0.85"></span> Выйти
                 </a>
             {% else %}
+                <a href="/register/" class="btn-header">
+                    <span uk-icon="icon: pencil; ratio: 0.85"></span> Регистрация
+                </a>
                 <a href="/login/" class="btn-header">
                     <span uk-icon="icon: lock; ratio: 0.85"></span> Войти
                 </a>
@@ -204,16 +211,22 @@
             </div>
         </div>
 
-        <!-- Фильтр -->
-        <div class="uk-flex uk-flex-middle uk-flex-wrap uk-margin-medium-bottom" style="gap:10px;">
+        <!-- Фильтр — выпадающий список -->
+        <div class="uk-flex uk-flex-middle uk-margin-medium-bottom" style="gap: 12px;">
             <span class="uk-text-bold uk-text-small uk-text-muted">Количество мест:</span>
-            <a href="/" class="filter-chip {% if not selected %}active{% endif %}">Все столики</a>
-            {% for cap in all_capacities %}
-            <a href="/?capacity={{ cap }}"
-               class="filter-chip {% if selected == cap|stringformat:'s' %}active{% endif %}">
-                от {{ cap }} мест
-            </a>
-            {% endfor %}
+            <form method="get" action="/" id="filter-form">
+                <select class="uk-select uk-width-auto" name="capacity"
+                        onchange="document.getElementById('filter-form').submit()"
+                        style="min-width: 180px;">
+                    <option value="" {% if not selected %}selected{% endif %}>Все столики</option>
+                    {% for cap in all_capacities %}
+                    <option value="{{ cap }}"
+                        {% if selected == cap|stringformat:'s' %}selected{% endif %}>
+                        от {{ cap }} мест
+                    </option>
+                    {% endfor %}
+                </select>
+            </form>
         </div>
 
         <!-- Заголовок -->
@@ -233,12 +246,14 @@
             <div>
                 <div class="uk-card uk-card-default uk-card-hover table-card">
 
-                    <div class="uk-card-header" style="background:var(--brown); padding:14px 20px;">
+                    <div class="uk-card-header" style="background: #8B5E3C; padding: 14px 20px;">
                         <div class="uk-flex uk-flex-between uk-flex-middle">
-                            <h3 class="uk-card-title uk-margin-remove" style="color:#fff; font-size:1rem;">
+                            <h3 class="uk-card-title uk-margin-remove"
+                                style="color: #fff !important; font-size: 1rem; margin: 0 !important;">
                                 Столик № {{ table.number }}
                             </h3>
-                            <span class="uk-badge" style="background:rgba(255,255,255,0.25); color:#fff;">
+                            <span style="background: rgba(255,255,255,0.25); color: #fff !important;
+                                         border-radius: 20px; padding: 2px 10px; font-size: 0.8rem; font-weight: 600;">
                                 {{ table.capacity }}
                                 {% if table.capacity == 1 %}место
                                 {% elif table.capacity <= 4 %}места

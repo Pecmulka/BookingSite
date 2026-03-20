@@ -37,6 +37,7 @@ class ReservationStatus(models.Model):
 class Reservation(models.Model):
     table             = models.ForeignKey(Table, on_delete=models.CASCADE)
     status            = models.ForeignKey(ReservationStatus, on_delete=models.CASCADE)
+    user              = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     guest_name        = models.CharField(max_length=200)
     guest_phone       = models.CharField(max_length=20)
     guest_email       = models.CharField(max_length=200)

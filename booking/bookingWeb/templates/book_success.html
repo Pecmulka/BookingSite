@@ -132,10 +132,18 @@
 
                 <hr class="uk-divider-muted">
 
-                <a href="/" class="uk-button uk-button-primary">
-                    <span uk-icon="icon: home; ratio: 0.9" class="uk-margin-small-right"></span>
-                    Вернуться на главную
-                </a>
+                <div class="uk-flex uk-flex-center" style="gap: 12px; flex-wrap: wrap;">
+                    {% if request.session.user_id %}
+                    <a href="/profile/" class="uk-button uk-button-primary">
+                        <span uk-icon="icon: user; ratio: 0.9" class="uk-margin-small-right"></span>
+                        Мои бронирования
+                    </a>
+                    {% endif %}
+                    <a href="/" class="uk-button uk-button-default">
+                        <span uk-icon="icon: home; ratio: 0.9" class="uk-margin-small-right"></span>
+                        На главную
+                    </a>
+                </div>
 
             </div>
         </div>

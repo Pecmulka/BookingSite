@@ -76,9 +76,9 @@ WSGI_APPLICATION = 'booking.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Base2',
+        'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': '',
+        'PASSWORD': 'Cocacolazera1485',
         'HOST': 'localhost',
         'PORT': '5432'
     }
