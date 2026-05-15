@@ -1,317 +1,84 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Бронирование столика № {{ table.number }} — Ресторан «Берёза»</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css">
-    <link rel="stylesheet" href="{% static 'booking/css/style.css' %}">
-    <style>
-        body { display:flex !important; flex-direction:column !important; min-height:100vh !important; margin:0 !important; background:#FAF7F2 !important; }
-        main { flex:1 0 auto !important; }
-        .site-footer { flex-shrink:0 !important; }
-        .site-header { background:#8B5E3C !important; border-bottom:3px solid #6e4a2e !important; position:sticky !important; top:0 !important; z-index:1000 !important; }
-        .header-row { display:flex !important; align-items:center !important; justify-content:space-between !important; height:62px !important; padding:0 24px !important; max-width:1200px !important; margin:0 auto !important; gap:20px !important; box-sizing:border-box !important; }
-        .site-logo { font-size:1.15rem !important; font-weight:700 !important; color:#fff !important; text-decoration:none !important; white-space:nowrap !important; flex-shrink:0 !important; }
-        .site-nav { display:flex !important; align-items:center !important; gap:4px !important; list-style:none !important; margin:0 !important; padding:0 !important; flex:1 !important; }
-        .site-nav li { margin:0 !important; padding:0 !important; }
-        .site-nav a { display:block !important; padding:6px 14px !important; border-radius:6px !important; color:rgba(255,255,255,0.85) !important; font-size:0.9rem !important; font-weight:500 !important; text-decoration:none !important; }
-        .site-nav a:hover, .site-nav a.active { background:rgba(255,255,255,0.18) !important; color:#fff !important; }
-        .header-right { display:flex !important; align-items:center !important; gap:12px !important; flex-shrink:0 !important; }
-        .header-user { color:rgba(255,255,255,0.85) !important; font-size:0.875rem !important; white-space:nowrap !important; }
-        .btn-header { display:inline-flex !important; align-items:center !important; gap:6px !important; padding:6px 16px !important; border-radius:6px !important; font-size:0.875rem !important; font-weight:600 !important; border:1.5px solid rgba(255,255,255,0.55) !important; color:#fff !important; background:transparent !important; text-decoration:none !important; cursor:pointer !important; white-space:nowrap !important; }
-        .btn-header:hover { background:rgba(255,255,255,0.18) !important; border-color:#fff !important; }
-        .site-footer { background:#3a2a1e !important; color:#BDB0A7 !important; padding:40px 0 0 !important; border-top:4px solid #8B5E3C !important; }
-        .footer-inner { max-width:1200px !important; margin:0 auto !important; padding:0 24px !important; display:grid !important; grid-template-columns:1fr 1fr 1fr !important; gap:32px !important; }
-        .footer-title { font-size:0.8rem !important; font-weight:700 !important; text-transform:uppercase !important; color:#fff !important; margin:0 0 10px !important; }
-        .footer-inner p, .footer-inner li { font-size:0.875rem !important; color:#BDB0A7 !important; margin:0 0 5px !important; }
-        .footer-inner ul { list-style:none !important; padding:0 !important; margin:0 !important; }
-        .footer-bottom { max-width:1200px !important; margin:28px auto 0 !important; padding:14px 24px !important; border-top:1px solid rgba(255,255,255,0.08) !important; font-size:0.8rem !important; text-align:center !important; color:#7A6E65 !important; }
 
-        /* Слоты */
-        .slots-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-        .slot-label {
-            display: block;
-            padding: 10px 8px;
-            border-radius: 8px;
-            border: 2px solid #E8E0D5;
-            text-align: center;
-            font-size: 0.875rem;
-            font-weight: 600;
-            cursor: pointer;
-            background: #fff;
-            color: #2C2218;
-            transition: border-color 0.15s, background 0.15s;
-            user-select: none;
-        }
-        .slot-label:hover {
-            border-color: #8B5E3C;
-            background: #F3EDE6;
-        }
-        .slot-radio:checked + .slot-label {
-            border-color: #8B5E3C;
-            background: #8B5E3C;
-            color: #fff;
-        }
-        .slot-radio { display: none; }
+{% block title %}Бронирование столика № {{ table.number }} — Ресторан «Берёза»{% endblock %}
 
-        .slot-busy {
-            display: block;
-            padding: 10px 8px;
-            border-radius: 8px;
-            border: 2px solid #F5C6C2;
-            text-align: center;
-            font-size: 0.875rem;
-            font-weight: 600;
-            background: #FDECEA;
-            color: #C0392B;
-            cursor: not-allowed;
-        }
-        .slot-legend {
-            display: flex;
-            gap: 18px;
-            margin-bottom: 14px;
-            font-size: 0.82rem;
-            color: #7A6E65;
-        }
-        .slot-legend span { display:flex; align-items:center; gap:6px; }
-        .legend-dot { width:13px; height:13px; border-radius:3px; flex-shrink:0; }
+{% block extra_css %}
+<style>
+.slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-bottom: 8px; }
+.slot-label { display: block; padding: 10px 8px; border-radius: 8px; border: 2px solid #E8E0D5; text-align: center; font-size: 0.875rem; font-weight: 600; cursor: pointer; background: #fff; color: #2C2218; transition: border-color 0.15s, background 0.15s; user-select: none; }
+.slot-label:hover { border-color: #8B5E3C; background: #F3EDE6; }
+.slot-radio:checked + .slot-label { border-color: #8B5E3C; background: #8B5E3C; color: #fff; }
+.slot-radio { display: none; }
+.slot-busy { display: block; padding: 10px 8px; border-radius: 8px; border: 2px solid #F5C6C2; text-align: center; font-size: 0.875rem; font-weight: 600; background: #FDECEA; color: #C0392B; cursor: not-allowed; }
+.slot-legend { display: flex; gap: 18px; margin-bottom: 14px; font-size: 0.82rem; color: #7A6E65; }
+.slot-legend span { display:flex; align-items:center; gap:6px; }
+.legend-dot { width:13px; height:13px; border-radius:3px; flex-shrink:0; }
+</style>
+{% endblock %}
 
-        @media (max-width: 700px) {
-            .site-nav { display:none !important; }
-            .header-user { display:none !important; }
-            .footer-inner { grid-template-columns:1fr !important; }
-            .header-row { padding:0 16px !important; }
-        }
-    </style>
-</head>
-<body>
+{% block content %}
+<ul class="uk-breadcrumb uk-margin-small-bottom">
+    <li><a href="/">Главная</a></li>
+    <li><span>Бронирование — Столик № {{ table.number }}</span></li>
+</ul>
 
-<!-- ШАПКА -->
-<header class="site-header">
-    <div class="header-row">
-        <a href="/" class="site-logo">🍽 Ресторан «Берёза»</a>
-        <ul class="site-nav">
-            <li><a href="/">Главная</a></li>
-            <li><a href="#" class="active">Бронирование</a></li>
-        </ul>
-        <div class="header-right">
-            {% if request.session.user_id %}
-                <span class="header-user">{{ request.session.user_fio }}</span>
-                <a href="/logout/" class="btn-header">
-                    <span uk-icon="icon: sign-out; ratio: 0.85"></span> Выйти
-                </a>
+<div class="uk-card uk-card-default uk-card-body uk-box-shadow-small uk-margin-medium-bottom" style="border-left: 4px solid #8B5E3C;">
+    <div class="uk-flex uk-flex-wrap" style="gap: 24px;">
+        <div><div class="uk-text-muted uk-text-small">Столик</div><div style="font-size:1.1rem; font-weight:700; color:#8B5E3C;">№ {{ table.number }}</div></div>
+        <div><div class="uk-text-muted uk-text-small">Вместимость</div><div style="font-weight:600;">{{ table.capacity }} {% if table.capacity == 1 %}место{% elif table.capacity <= 4 %}места{% else %}мест{% endif %}</div></div>
+        {% if table.description %}<div><div class="uk-text-muted uk-text-small">Расположение</div><div style="font-weight:600;">{{ table.description }}</div></div>{% endif %}
+    </div>
+</div>
+
+<div class="uk-card uk-card-default uk-card-body uk-box-shadow-small uk-margin-medium-bottom">
+    <h3 style="font-size:1rem; font-weight:700; margin:0 0 14px;">Шаг 1 — Выберите дату</h3>
+    <form method="get" action="{% url 'book_table' table.pk %}" id="date-form">
+        <input class="uk-input uk-width-auto" type="date" name="date" value="{{ selected_date }}" min="{{ today }}" onchange="document.getElementById('date-form').submit()">
+    </form>
+</div>
+
+<form method="post" action="{% url 'book_table' table.pk %}" class="uk-form-stacked">
+    {% csrf_token %}
+    <input type="hidden" name="date" value="{{ selected_date }}">
+
+    <div class="uk-card uk-card-default uk-card-body uk-box-shadow-small uk-margin-medium-bottom">
+        <h3 style="font-size:1rem; font-weight:700; margin:0 0 14px;">
+            Шаг 2 — Выберите время
+            <span style="font-size:0.8rem; font-weight:400; color:#7A6E65;">({{ selected_date }}, ресторан работает 10:00 — 23:00)</span>
+        </h3>
+        <div class="slot-legend">
+            <span><span class="legend-dot" style="background:#fff; border:2px solid #8B5E3C;"></span>Свободно</span>
+            <span><span class="legend-dot" style="background:#FDECEA; border:2px solid #F5C6C2;"></span>Занято</span>
+            <span><span class="legend-dot" style="background:#8B5E3C;"></span>Выбрано</span>
+        </div>
+        <div class="slots-grid">
+            {% for slot in slots %}
+            {% if slot.busy %}
+                <span class="slot-busy">{{ slot.label }}<br><span style="font-size:0.75rem; font-weight:400;">Занято</span></span>
             {% else %}
-                <a href="/login/" class="btn-header">
-                    <span uk-icon="icon: lock; ratio: 0.85"></span> Войти
-                </a>
+                <input class="slot-radio" type="radio" name="start_time" id="slot_{{ forloop.counter }}" value="{{ slot.start|time:'H:i' }}" {% if post.start_time == slot.start|time:'H:i' %}checked{% endif %}>
+                <label class="slot-label" for="slot_{{ forloop.counter }}">{{ slot.label }}<br><span style="font-size:0.75rem; font-weight:400;">Свободно</span></label>
             {% endif %}
+            {% endfor %}
+        </div>
+        {% if error and 'время' in error %}<div class="uk-alert-danger uk-margin-small-top" uk-alert>{{ error }}</div>{% endif %}
+    </div>
+
+    <div class="uk-card uk-card-default uk-card-body uk-box-shadow-small uk-margin-medium-bottom">
+        <h3 style="font-size:1rem; font-weight:700; margin:0 0 14px;">Шаг 3 — Ваши данные</h3>
+        {% if error and 'время' not in error %}<div class="uk-alert-danger" uk-alert><span uk-icon="icon: warning; ratio: 0.9" class="uk-margin-small-right"></span>{{ error }}</div>{% endif %}
+        <div class="uk-grid-small uk-child-width-1-2@s" uk-grid>
+            <div><div class="uk-margin"><label class="uk-form-label">Имя <span class="uk-text-danger">*</span></label><input class="uk-input" type="text" name="guest_name" value="{{ post.guest_name|default:'' }}" placeholder="Иванов Иван" required></div></div>
+            <div><div class="uk-margin"><label class="uk-form-label">Телефон <span class="uk-text-danger">*</span></label><input class="uk-input" type="text" name="guest_phone" value="{{ post.guest_phone|default:'' }}" placeholder="+7 (000) 000-00-00" required></div></div>
+            <div><div class="uk-margin"><label class="uk-form-label">Email</label><input class="uk-input" type="email" name="guest_email" value="{{ post.guest_email|default:'' }}" placeholder="mail@example.com"></div></div>
+            <div><div class="uk-margin"><label class="uk-form-label">Количество гостей <span class="uk-text-danger">*</span></label><input class="uk-input" type="number" name="guests_count" value="{{ post.guests_count|default:'' }}" min="1" max="{{ table.capacity }}" required><div class="uk-text-small uk-text-muted" style="margin-top:4px;">Макс. {{ table.capacity }} {% if table.capacity == 1 %}человек{% elif table.capacity <= 4 %}человека{% else %}человек{% endif %}</div></div></div>
+        </div>
+        <div class="uk-margin"><label class="uk-form-label">Пожелания</label><input class="uk-input" type="text" name="comment" value="{{ post.comment|default:'' }}" placeholder="Особые пожелания..."></div>
+        <div class="uk-margin-medium-top uk-flex" style="gap:12px; align-items:center;">
+            <button type="submit" class="uk-button uk-button-primary"><span uk-icon="icon: check; ratio: 0.9" class="uk-margin-small-right"></span>Подтвердить бронирование</button>
+            <a href="/" class="uk-button uk-button-default">Отмена</a>
         </div>
     </div>
-</header>
-
-<main class="uk-section uk-section-small">
-    <div class="uk-container">
-
-        <!-- Хлебные крошки -->
-        <ul class="uk-breadcrumb uk-margin-small-bottom">
-            <li><a href="/">Главная</a></li>
-            <li><span>Бронирование — Столик № {{ table.number }}</span></li>
-        </ul>
-
-        <!-- Карточка столика -->
-        <div class="uk-card uk-card-default uk-card-body uk-box-shadow-small uk-margin-medium-bottom"
-             style="border-left: 4px solid #8B5E3C;">
-            <div class="uk-flex uk-flex-wrap" style="gap: 24px;">
-                <div>
-                    <div class="uk-text-muted uk-text-small">Столик</div>
-                    <div style="font-size:1.1rem; font-weight:700; color:#8B5E3C;">№ {{ table.number }}</div>
-                </div>
-                <div>
-                    <div class="uk-text-muted uk-text-small">Вместимость</div>
-                    <div style="font-weight:600;">
-                        {{ table.capacity }}
-                        {% if table.capacity == 1 %}место{% elif table.capacity <= 4 %}места{% else %}мест{% endif %}
-                    </div>
-                </div>
-                {% if table.description %}
-                <div>
-                    <div class="uk-text-muted uk-text-small">Расположение</div>
-                    <div style="font-weight:600;">{{ table.description }}</div>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-
-        <!-- Шаг 1: Дата — отдельная GET-форма, обновляется сразу при выборе -->
-        <div class="uk-card uk-card-default uk-card-body uk-box-shadow-small uk-margin-medium-bottom">
-            <h3 style="font-size:1rem; font-weight:700; margin:0 0 14px;">
-                Шаг 1 — Выберите дату
-            </h3>
-            <form method="get" action="/book/{{ table.pk }}/" id="date-form">
-                <input class="uk-input uk-width-auto" type="date"
-                       name="date" value="{{ selected_date }}" min="{{ today }}"
-                       onchange="document.getElementById('date-form').submit()">
-            </form>
-        </div>
-
-        <!-- Шаг 2: Слоты + POST-форма -->
-        <form method="post" action="/book/{{ table.pk }}/" class="uk-form-stacked">
-            {% csrf_token %}
-            <input type="hidden" name="date" value="{{ selected_date }}">
-
-            <div class="uk-card uk-card-default uk-card-body uk-box-shadow-small uk-margin-medium-bottom">
-                <h3 style="font-size:1rem; font-weight:700; margin:0 0 14px;">
-                    Шаг 2 — Выберите время
-                    <span style="font-size:0.8rem; font-weight:400; color:#7A6E65;">
-                        ({{ selected_date }}, ресторан работает 10:00 — 23:00)
-                    </span>
-                </h3>
-
-                <div class="slot-legend">
-                    <span>
-                        <span class="legend-dot" style="background:#fff; border:2px solid #8B5E3C;"></span>
-                        Свободно
-                    </span>
-                    <span>
-                        <span class="legend-dot" style="background:#FDECEA; border:2px solid #F5C6C2;"></span>
-                        Занято
-                    </span>
-                    <span>
-                        <span class="legend-dot" style="background:#8B5E3C;"></span>
-                        Выбрано
-                    </span>
-                </div>
-
-                <div class="slots-grid">
-                    {% for slot in slots %}
-                    {% if slot.busy %}
-                        <span class="slot-busy">
-                            {{ slot.label }}<br>
-                            <span style="font-size:0.75rem; font-weight:400;">Занято</span>
-                        </span>
-                    {% else %}
-                        <input class="slot-radio" type="radio" name="start_time"
-                               id="slot_{{ forloop.counter }}"
-                               value="{{ slot.start|time:'H:i' }}"
-                               {% if post.start_time == slot.start|time:'H:i' %}checked{% endif %}>
-                        <label class="slot-label" for="slot_{{ forloop.counter }}">
-                            {{ slot.label }}<br>
-                            <span style="font-size:0.75rem; font-weight:400;">Свободно</span>
-                        </label>
-                    {% endif %}
-                    {% endfor %}
-                </div>
-
-                {% if error and 'время' in error %}
-                <div class="uk-alert-danger uk-margin-small-top" uk-alert>{{ error }}</div>
-                {% endif %}
-            </div>
-
-            <!-- Шаг 3: Данные гостя -->
-            <div class="uk-card uk-card-default uk-card-body uk-box-shadow-small uk-margin-medium-bottom">
-                <h3 style="font-size:1rem; font-weight:700; margin:0 0 14px;">
-                    Шаг 3 — Ваши данные
-                </h3>
-
-                {% if error and 'время' not in error %}
-                <div class="uk-alert-danger" uk-alert>
-                    <span uk-icon="icon: warning; ratio: 0.9" class="uk-margin-small-right"></span>
-                    {{ error }}
-                </div>
-                {% endif %}
-
-                <div class="uk-grid-small uk-child-width-1-2@s" uk-grid>
-                    <div>
-                        <div class="uk-margin">
-                            <label class="uk-form-label">Имя <span class="uk-text-danger">*</span></label>
-                            <input class="uk-input" type="text" name="guest_name"
-                                   value="{{ post.guest_name|default:'' }}"
-                                   placeholder="Иванов Иван" required>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="uk-margin">
-                            <label class="uk-form-label">Телефон <span class="uk-text-danger">*</span></label>
-                            <input class="uk-input" type="text" name="guest_phone"
-                                   value="{{ post.guest_phone|default:'' }}"
-                                   placeholder="+7 (000) 000-00-00" required>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="uk-margin">
-                            <label class="uk-form-label">Email</label>
-                            <input class="uk-input" type="email" name="guest_email"
-                                   value="{{ post.guest_email|default:'' }}"
-                                   placeholder="mail@example.com">
-                        </div>
-                    </div>
-                    <div>
-                        <div class="uk-margin">
-                            <label class="uk-form-label">
-                                Количество гостей <span class="uk-text-danger">*</span>
-                            </label>
-                            <input class="uk-input" type="number" name="guests_count"
-                                   value="{{ post.guests_count|default:'' }}"
-                                   min="1" max="{{ table.capacity }}" required>
-                            <div class="uk-text-small uk-text-muted" style="margin-top:4px;">
-                                Макс. {{ table.capacity }}
-                                {% if table.capacity == 1 %}человек{% elif table.capacity <= 4 %}человека{% else %}человек{% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="uk-margin">
-                    <label class="uk-form-label">Пожелания</label>
-                    <input class="uk-input" type="text" name="comment"
-                           value="{{ post.comment|default:'' }}"
-                           placeholder="Особые пожелания...">
-                </div>
-
-                <div class="uk-margin-medium-top uk-flex" style="gap:12px; align-items:center;">
-                    <button type="submit" class="uk-button uk-button-primary">
-                        <span uk-icon="icon: check; ratio: 0.9" class="uk-margin-small-right"></span>
-                        Подтвердить бронирование
-                    </button>
-                    <a href="/" class="uk-button uk-button-default">Отмена</a>
-                </div>
-            </div>
-
-        </form>
-
-    </div>
-</main>
-
-<!-- ПОДВАЛ -->
-<footer class="site-footer">
-    <div class="footer-inner">
-        <div>
-            <p class="footer-title">Ресторан «Берёза»</p>
-            <p>Бронируйте столик заранее — и вас будут ждать.</p>
-        </div>
-        <div>
-            <p class="footer-title">Контакты</p>
-            <ul>
-                <li>г. Абакан, ул. Пушкина, 10</li>
-                <li>+7 (3902) 22-33-44</li>
-            </ul>
-        </div>
-        <div>
-            <p class="footer-title">Время работы</p>
-            <ul><li>Ежедневно: 10:00 — 23:00</li></ul>
-        </div>
-    </div>
-    <div class="footer-bottom">&copy; {% now "Y" %} Ресторан «Берёза»</div>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit-icons.min.js"></script>
-</body>
-</html>
+</form>
+{% endblock %}

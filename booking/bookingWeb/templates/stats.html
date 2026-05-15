@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Статистика — Ресторан «Берёза»{% endblock %}
+
+{% block content %}
+<ul class="uk-breadcrumb uk-margin-small-bottom">
+    <li><a href="/">Главная</a></li>
+    <li><span>Статистика</span></li>
+</ul>
+
+<h2 class="uk-heading-line uk-text-center"><span>Аналитика бронирований</span></h2>
+
+<!-- === ЧИСЛОВЫЕ ПОКАЗАТЕЛИ === -->
+<div class="uk-child-width-1-2@s uk-child-width-1-4@m uk-margin-medium-bottom" uk-grid>
+    <div>
+        <div class="uk-card uk-card-default uk-card-body uk-text-center">
+            <div uk-icon="icon: calendar; ratio: 2" class="uk-text-primary"></div>
+            <h3 class="uk-heading-small uk-margin-remove">{{ total_this_month }}</h3>
+            <p class="uk-text-muted uk-margin-remove">Броней в {{ month_name }} {{ current_year }}</p>
+        </div>
+    </div>
+    <div>
+        <div class="uk-card uk-card-default uk-card-body uk-text-center">
+            <div uk-icon="icon: users; ratio: 2" class="uk-text-success"></div>
+            <h3 class="uk-heading-small uk-margin-remove">{{ guests_this_month }}</h3>
+            <p class="uk-text-muted uk-margin-remove">Гостей за месяц</p>
+        </div>
+    </div>
+    <div>
+        <div class="uk-card uk-card-default uk-card-body uk-text-center">
+            <div uk-icon="icon: table; ratio: 2" class="uk-text-warning"></div>
+            <h3 class="uk-heading-small uk-margin-remove">{{ occupancy_rate }}%</h3>
+            <p class="uk-text-muted uk-margin-remove">Загруженность столов</p>
+        </div>
+    </div>
+    <div>
+        <div class="uk-card uk-card-default uk-card-body uk-text-center">
+            <div uk-icon="icon: happy; ratio: 2" class="uk-text-info"></div>
+            <h3 class="uk-heading-small uk-margin-remove">{{ avg_guests }}</h3>
+            <p class="uk-text-muted uk-margin-remove">Среднее гостей на бронь</p>
+        </div>
+    </div>
+</div>
+
+<!-- === СТАТУСЫ БРОНИРОВАНИЙ === -->
+<div class="uk-card uk-card-default uk-card-body uk-margin-medium-bottom">
+    <h4 class="uk-card-title uk-margin-remove">Статусы бронирований (всё время)</h4>
+    <div class="uk-child-width-1-4@s uk-margin-top" uk-grid>
+        <div><span class="uk-badge badge-confirmed uk-margin-small-right"></span>Подтверждена: <strong>{{ status_confirmed }}</strong></div>
+        <div><span class="uk-badge badge-pending uk-margin-small-right"></span>Ожидает: <strong>{{ status_pending }}</strong></div>
+        <div><span class="uk-badge badge-cancelled uk-margin-small-right"></span>Отменена: <strong>{{ status_cancelled }}</strong></div>
+        <div><span class="uk-badge badge-completed uk-margin-small-right"></span>Завершена: <strong>{{ status_completed }}</strong></div>
+    </div>
+</div>
+
+<!-- === ГРАФИК 1: По месяцам === -->
+<div class="uk-card uk-card-default uk-card-body uk-margin-medium-bottom">
+    <h4 class="uk-card-title">📈 Динамика бронирований</h4>
+    <div class="uk-text-center">
+        <img src="data:image/png;base64,{{ chart1 }}" alt="График по месяцам" class="uk-responsive-width uk-border-rounded">
+    </div>
+</div>
+
+<!-- === ГРАФИК 2: Загрузка столов === -->
+<div class="uk-card uk-card-default uk-card-body">
+    <h4 class="uk-card-title">🪑 Топ-10 столиков по популярности ({{ month_name }} {{ current_year }})</h4>
+    <div class="uk-text-center">
+        <img src="data:image/png;base64,{{ chart2 }}" alt="Загрузка столиков" class="uk-responsive-width uk-border-rounded">
+    </div>
+    <p class="uk-text-muted uk-text-small uk-margin-top">
+        <span class="uk-badge" style="background:#3D8B5E"></span> ≥5 броней &nbsp;
+        <span class="uk-badge" style="background:#8B5E3C"></span> 3-4 брони &nbsp;
+        <span class="uk-badge" style="background:#C0392B"></span> 1-2 брони
+    </p>
+</div>
+{% endblock %}

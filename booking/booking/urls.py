@@ -27,4 +27,9 @@ urlpatterns = [
     path('admin/reservations/add/', views.reservation_add, name='reservation_add'),
     path('admin/reservations/<int:pk>/edit/', views.reservation_edit, name='reservation_edit'),
     path('admin/reservations/<int:pk>/delete/', views.reservation_delete, name='reservation_delete'),
+    path('admin/stats/', views.stats_view, name='stats'),
+    path('admin/users/', views.user_management_view, name='user_management'),
+    path('admin/soft_deleted/', views.soft_deleted_view, name='soft_deleted'),
+    path('admin/soft_deleted/restore_table/<int:pk>/', views.table_restore, name='table_restore'),
+    path('admin/soft_deleted/restore_reservation/<int:pk>/', views.reservation_restore, name='reservation_restore'),
 ]

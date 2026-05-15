@@ -1,0 +1,20 @@
+{% if tables %}
+<table class="uk-table uk-table-striped uk-table-hover uk-table-divider uk-margin-remove">
+    <thead><tr><th>№ столика</th><th>Вместимость</th><th>Описание</th><th class="uk-text-center">Действия</th></tr></thead>
+    <tbody>
+        {% for table in tables %}
+        <tr>
+            <td><strong>{{ table.number }}</strong></td>
+            <td>{{ table.capacity }} мест</td>
+            <td class="uk-text-muted">{{ table.description|default:"—" }}</td>
+            <td class="uk-text-center">
+                <a href="{% url 'table_edit' table.pk %}" class="uk-button uk-button-default uk-button-small uk-margin-small-right">✏️</a>
+                <a href="{% url 'table_delete' table.pk %}" class="uk-button uk-button-danger uk-button-small">🗑️</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="uk-placeholder uk-text-center"><p>Столиков не найдено.</p></div>
+{% endif %}

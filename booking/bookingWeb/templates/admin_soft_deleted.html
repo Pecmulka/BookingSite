@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Удалённые записи — Ресторан «Берёза»{% endblock %}
+
+{% block content %}
+<ul class="uk-breadcrumb uk-margin-small-bottom">
+    <li><a href="/">Главная</a></li>
+    <li><span>Корзина (мягко удалённые)</span></li>
+</ul>
+
+<h2 class="uk-heading-line uk-text-center"><span>Восстановление записей</span></h2>
+
+<h3 class="uk-heading-bullet">Столики</h3>
+{% if tables %}
+<table class="uk-table uk-table-small uk-table-divider">
+    <thead><tr><th>№</th><th>Вместимость</th><th>Дата удаления</th><th>Действие</th></tr></thead>
+    <tbody>
+        {% for t in tables %}
+        <tr><td>{{ t.number }}</td><td>{{ t.capacity }}</td><td>{{ t.delete_date|date:"d.m.Y H:i" }}</td><td><a href="{% url 'table_restore' t.pk %}" class="uk-button uk-button-small uk-button-primary">Восстановить</a></td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}<p class="uk-text-muted">Удалённых столиков нет.</p>{% endif %}
+
+<h3 class="uk-heading-bullet uk-margin-top">Бронирования</h3>
+{% if reservations %}
+<table class="uk-table uk-table-small uk-table-divider">
+    <thead><tr><th>Код</th><th>Гость</th><th>Дата</th><th>Дата удаления</th><th>Действие</th></tr></thead>
+    <tbody>
+        {% for r in reservations %}
+        <tr><td>{{ r.confirmation_code }}</td><td>{{ r.guest_name }}</td><td>{{ r.date }}</td><td>{{ r.delete_date|date:"d.m.Y H:i" }}</td><td><a href="{% url 'reservation_restore' r.pk %}" class="uk-button uk-button-small uk-button-primary">Восстановить</a></td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}<p class="uk-text-muted">Удалённых бронирований нет.</p>{% endif %}
+{% endblock %}

@@ -1,13 +1,14 @@
 from django.test import TestCase, Client
+from django.urls import reverse
 from .models import Role, User, Table, ReservationStatus, Reservation
 from datetime import date, time
+from django.utils import timezone
 
 
 class BookingTests(TestCase):
 
     def setUp(self):
         """Подготовка тестовых данных перед каждым тестом."""
-
         self.role_admin = Role.objects.create(name='Администратор')
         self.role_guest = Role.objects.create(name='Гость')
 
@@ -24,14 +25,10 @@ class BookingTests(TestCase):
             role=self.role_guest,
         )
 
-        self.table1 = Table.objects.create(
-            number=1, capacity=2, description='У окна'
-        )
-        self.table2 = Table.objects.create(
-            number=2, capacity=4, description='В центре зала'
-        )
+        self.table1 = Table.objects.create(number=1, capacity=2, description='У окна')
+        self.table2 = Table.objects.create(number=2, capacity=4, description='В центре зала')
 
-        self.status_pending   = ReservationStatus.objects.create(name='Ожидает подтверждения')
+        self.status_pending = ReservationStatus.objects.create(name='Ожидает подтверждения')
         self.status_cancelled = ReservationStatus.objects.create(name='Отменена')
 
         self.reservation = Reservation.objects.create(
@@ -51,33 +48,24 @@ class BookingTests(TestCase):
 
         self.client = Client()
 
-    # ----------------------------------------------------------------
-    # Тест 1: Авторизация с неверным паролем
-    # ----------------------------------------------------------------
     def test_login_wrong_password(self):
         """Авторизация с неверным паролем возвращает сообщение об ошибке."""
-        response = self.client.post('/login/', {
+        response = self.client.post(reverse('login'), {
             'login': 'admin',
             'password': 'wrongpassword',
         })
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Неверный логин или пароль')
 
-    # ----------------------------------------------------------------
-    # Тест 2: Фильтрация столиков по вместимости
-    # ----------------------------------------------------------------
     def test_table_filter_by_capacity(self):
         """Фильтр по вместимости возвращает только подходящие столики."""
-        tables_2 = Table.objects.filter(capacity__gte=2)
-        tables_4 = Table.objects.filter(capacity__gte=4)
+        tables_2 = Table.objects.filter(capacity__gte=2, delete_date__isnull=True)
+        tables_4 = Table.objects.filter(capacity__gte=4, delete_date__isnull=True)
 
         self.assertEqual(tables_2.count(), 2)
         self.assertEqual(tables_4.count(), 1)
         self.assertEqual(tables_4.first().number, 2)
 
-    # ----------------------------------------------------------------
-    # Тест 3: Уникальность кода подтверждения
-    # ----------------------------------------------------------------
     def test_confirmation_code_unique(self):
         """Коды подтверждения у разных бронирований не совпадают."""
         reservation2 = Reservation.objects.create(
@@ -92,29 +80,30 @@ class BookingTests(TestCase):
             guests_count=3,
             confirmation_code='TESTCO2',
         )
-        self.assertNotEqual(
-            self.reservation.confirmation_code,
-            reservation2.confirmation_code,
-        )
+        self.assertNotEqual(self.reservation.confirmation_code, reservation2.confirmation_code)
 
-    # ----------------------------------------------------------------
-    # Тест 4: Страница администратора недоступна без авторизации
-    # ----------------------------------------------------------------
     def test_admin_page_requires_auth(self):
         """Список столиков администратора недоступен без авторизации."""
-        response = self.client.get('/admin/tables/')
+        response = self.client.get(reverse('table_list'))
         self.assertEqual(response.status_code, 302)
-        self.assertIn('/login/', response['Location'])
+        self.assertIn(reverse('login'), response['Location'])
 
-    # ----------------------------------------------------------------
-    # Тест 5: Подсчёт занятых слотов
-    # ----------------------------------------------------------------
     def test_busy_slots_count(self):
         """Занятый слот корректно определяется для столика и даты."""
         busy = Reservation.objects.filter(
             table=self.table1,
             date=date(2026, 6, 15),
+            delete_date__isnull=True
         ).exclude(status__name='Отменена').values_list('start_time', flat=True)
 
         self.assertIn(time(12, 0), busy)
         self.assertNotIn(time(14, 0), busy)
+
+    def test_soft_delete_logic(self):
+        """Мягкое удаление скрывает запись из основных списков."""
+        self.table1.delete_date = timezone.now()
+        self.table1.save()
+
+        active_tables = Table.objects.filter(delete_date__isnull=True)
+        self.assertEqual(active_tables.count(), 1)
+        self.assertNotIn(self.table1, active_tables)

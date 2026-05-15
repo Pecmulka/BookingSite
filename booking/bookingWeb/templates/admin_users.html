@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Управление пользователями — Ресторан «Берёза»{% endblock %}
+{% block extra_css %}
+<style>
+    .uk-badge.badge-pending   { background: #FEF9E7; color: #000000 !important; border: 1px solid #f9e79f; }
+    .uk-badge.badge-confirmed { background: #EAFAF1; color: #000000 !important; border: 1px solid #a9dfbf; }
+    .uk-badge.badge-cancelled { background: #FDECEA; color: #000000 !important; border: 1px solid #f5c6c2; }
+    .uk-badge.badge-completed { background: #EAF4FB; color: #000000 !important; border: 1px solid #aed6f1; }
+</style>
+{% endblock %}
+{% block content %}
+<ul class="uk-breadcrumb uk-margin-small-bottom">
+    <li><a href="/">Главная</a></li>
+    <li><span>Управление пользователями</span></li>
+</ul>
+
+<h2 class="uk-heading-line uk-text-center"><span>Пользователи системы</span></h2>
+
+{% if users %}
+<table class="uk-table uk-table-divider uk-table-hover">
+    <thead><tr><th>ФИО</th><th>Логин</th><th>Роль</th><th>Статус</th><th>Действие</th></tr></thead>
+    <tbody>
+        {% for u in users %}
+        <tr>
+            <td>{{ u.fio }}</td><td>{{ u.login }}</td><td>{{ u.role.name }}</td>
+            <td>{% if u.is_active %}<span class="uk-badge badge-confirmed">Активен</span>{% else %}<span class="uk-badge badge-cancelled">Деактивирован</span>{% endif %}</td>
+            <td>
+                <form method="post" class="uk-display-inline">{% csrf_token %}
+                    <input type="hidden" name="user_id" value="{{ u.id }}">
+                    <button type="submit" class="uk-button uk-button-small {% if u.is_active %}uk-button-danger{% else %}uk-button-primary{% endif %}">{% if u.is_active %}Деактивировать{% else %}Активировать{% endif %}</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="uk-alert-primary uk-text-center"><p>Пользователей пока нет.</p></div>
+{% endif %}
+{% endblock %}
